@@ -1,5 +1,11 @@
-from models import Base, engine
+from flask import Flask
+from models import db
 
-print("📦 Creating tables if they don’t exist...")
-Base.metadata.create_all(bind=engine)
-print("✅ Done!")
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+    print("✅ Database tables created")

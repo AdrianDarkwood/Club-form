@@ -1,24 +1,49 @@
-from sqlalchemy import create_engine, Column, Integer, String, TIMESTAMP, func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import os
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
-# Database URL from Render (use environment variable)
-DATABASE_URL = os.getenv("DATABASE_URL")
+db = SQLAlchemy()
 
-# SQLAlchemy setup
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-
-Base = declarative_base()
-
-# Example table for registrations
-class Registration(Base):
+class Registration(db.Model):
     __tablename__ = "registrations"
+    id = db.Column(db.Integer, primary_key=True)
+    team_name = db.Column(db.String(200), nullable=False)
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False)
-    email = Column(String(255), nullable=False)
-    submitted_at = Column(TIMESTAMP, server_default=func.now())
-# Ensure all tables are created when the app starts
-Base.metadata.create_all(bind=engine)
+    # Member 1 (required)
+    member1_name = db.Column(db.String(100), nullable=False)
+    member1_email = db.Column(db.String(100), nullable=False)
+    member1_usn = db.Column(db.String(100), nullable=False)
+    member1_phone = db.Column(db.String(20))
+    member1_branch = db.Column(db.String(50), nullable=False)
+
+    # Member 2–6 (optional)
+    member2_name = db.Column(db.String(100))
+    member2_email = db.Column(db.String(100))
+    member2_usn = db.Column(db.String(100))
+    member2_phone = db.Column(db.String(20))
+    member2_branch = db.Column(db.String(50))
+
+    member3_name = db.Column(db.String(100))
+    member3_email = db.Column(db.String(100))
+    member3_usn = db.Column(db.String(100))
+    member3_phone = db.Column(db.String(20))
+    member3_branch = db.Column(db.String(50))
+
+    member4_name = db.Column(db.String(100))
+    member4_email = db.Column(db.String(100))
+    member4_usn = db.Column(db.String(100))
+    member4_phone = db.Column(db.String(20))
+    member4_branch = db.Column(db.String(50))
+
+    member5_name = db.Column(db.String(100))
+    member5_email = db.Column(db.String(100))
+    member5_usn = db.Column(db.String(100))
+    member5_phone = db.Column(db.String(20))
+    member5_branch = db.Column(db.String(50))
+
+    member6_name = db.Column(db.String(100))
+    member6_email = db.Column(db.String(100))
+    member6_usn = db.Column(db.String(100))
+    member6_phone = db.Column(db.String(20))
+    member6_branch = db.Column(db.String(50))
+
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)

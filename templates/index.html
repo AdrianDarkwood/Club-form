@@ -1,16 +1,109 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Club Registration</title>
+  <title>Team Registration</title>
 </head>
 <body>
-  <h1>Register</h1>
+  <h1>Register Your Team</h1>
   <form action="/submit" method="POST">
-    <label>Name:</label>
-    <input type="text" name="name" required><br><br>
+    <label>Team Name (required):</label>
+    <input type="text" name="team_name" required><br><br>
 
-    <label>Email:</label>
-    <input type="email" name="email" required><br><br>
+    <h3>Member 1 (Required)</h3>
+    <input type="text" name="member1_name" placeholder="Name" required><br>
+    <input type="email" name="member1_email" placeholder="Email" required><br>
+    <input type="text" name="member1_usn" placeholder="USN" required><br>
+    <input type="text" name="member1_phone" placeholder="Phone"><br>
+    <label>Branch:</label>
+    <select name="member1_branch" required>
+      <option value="">-- Select Branch --</option>
+      <option value="CS">CS</option>
+      <option value="AIML">AIML</option>
+      <option value="ISE">ISE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="ME">ME</option>
+    </select><br><br>
+
+    <h3>Member 2</h3>
+    <input type="text" name="member2_name" placeholder="Name"><br>
+    <input type="email" name="member2_email" placeholder="Email"><br>
+    <input type="text" name="member2_usn" placeholder="USN"><br>
+    <input type="text" name="member2_phone" placeholder="Phone"><br>
+    <label>Branch:</label>
+    <select name="member2_branch">
+      <option value="">-- Select Branch --</option>
+      <option value="CS">CS</option>
+      <option value="AIML">AIML</option>
+      <option value="ISE">ISE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="ME">ME</option>
+    </select><br><br>
+
+    <h3>Member 3</h3>
+    <input type="text" name="member3_name" placeholder="Name"><br>
+    <input type="email" name="member3_email" placeholder="Email"><br>
+    <input type="text" name="member3_usn" placeholder="USN"><br>
+    <input type="text" name="member3_phone" placeholder="Phone"><br>
+    <label>Branch:</label>
+    <select name="member3_branch">
+      <option value="">-- Select Branch --</option>
+      <option value="CS">CS</option>
+      <option value="AIML">AIML</option>
+      <option value="ISE">ISE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="ME">ME</option>
+    </select><br><br>
+
+    <h3>Member 4</h3>
+    <input type="text" name="member4_name" placeholder="Name"><br>
+    <input type="email" name="member4_email" placeholder="Email"><br>
+    <input type="text" name="member4_usn" placeholder="USN"><br>
+    <input type="text" name="member4_phone" placeholder="Phone"><br>
+    <label>Branch:</label>
+    <select name="member4_branch">
+      <option value="">-- Select Branch --</option>
+      <option value="CS">CS</option>
+      <option value="AIML">AIML</option>
+      <option value="ISE">ISE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="ME">ME</option>
+    </select><br><br>
+
+    <h3>Member 5</h3>
+    <input type="text" name="member5_name" placeholder="Name"><br>
+    <input type="email" name="member5_email" placeholder="Email"><br>
+    <input type="text" name="member5_usn" placeholder="USN"><br>
+    <input type="text" name="member5_phone" placeholder="Phone"><br>
+    <label>Branch:</label>
+    <select name="member5_branch">
+      <option value="">-- Select Branch --</option>
+      <option value="CS">CS</option>
+      <option value="AIML">AIML</option>
+      <option value="ISE">ISE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="ME">ME</option>
+    </select><br><br>
+
+    <h3>Member 6</h3>
+    <input type="text" name="member6_name" placeholder="Name"><br>
+    <input type="email" name="member6_email" placeholder="Email"><br>
+    <input type="text" name="member6_usn" placeholder="USN"><br>
+    <input type="text" name="member6_phone" placeholder="Phone"><br>
+    <label>Branch:</label>
+    <select name="member6_branch">
+      <option value="">-- Select Branch --</option>
+      <option value="CS">CS</option>
+      <option value="AIML">AIML</option>
+      <option value="ISE">ISE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="ME">ME</option>
+    </select><br><br>
 
     <button type="submit">Submit</button>
   </form>

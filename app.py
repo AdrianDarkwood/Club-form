@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
+from sqlalchemy import inspect
 
 app = Flask(__name__)
 
@@ -54,7 +55,8 @@ class Registration(db.Model):
 
 # ✅ Create tables only if they don't exist
 with app.app_context():
-    if not db.engine.dialect.has_table(db.engine, "registration"):
+    inspector = inspect(db.engine)
+    if not inspector.has_table("registration"):
         db.create_all()
 
 @app.route("/")

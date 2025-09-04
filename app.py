@@ -108,9 +108,9 @@ def submit():
 
     return redirect(url_for("thank_you"))
 
-@app.route("/thankyou")
+@app.route("/thank-you")
 def thank_you():
-    return render_template("thankyou.html")
+    return render_template("thank-you.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

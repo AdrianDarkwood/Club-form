@@ -13,7 +13,9 @@ db = SQLAlchemy(app)
 
 # Model
 class Registration(db.Model):
+    __tablename__ = "registration"  # Ensure table name matches models.py
     id = db.Column(db.Integer, primary_key=True)
+    team_name = db.Column(db.String(200), nullable=False)  # Added team_name, required
     member1_name = db.Column(db.String(100), nullable=False)
     member1_email = db.Column(db.String(120), nullable=False)
     member1_branch = db.Column(db.String(50), nullable=False)
@@ -52,7 +54,6 @@ class Registration(db.Model):
 
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-
 # ✅ Create tables only if they don't exist
 with app.app_context():
     inspector = inspect(db.engine)
@@ -66,6 +67,7 @@ def index():
 @app.route("/submit", methods=["POST"])
 def submit():
     registration = Registration(
+        team_name=request.form["team_name"],  # Added team_name to form handling
         member1_name=request.form["member1_name"],
         member1_email=request.form["member1_email"],
         member1_branch=request.form["member1_branch"],

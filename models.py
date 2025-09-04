@@ -20,3 +20,5 @@ class Registration(Base):
     name = Column(String(255), nullable=False)
     email = Column(String(255), nullable=False)
     submitted_at = Column(TIMESTAMP, server_default=func.now())
+# Ensure all tables are created when the app starts
+Base.metadata.create_all(bind=engine)

@@ -49,6 +49,10 @@ def require_basic_auth(view_func):
 
 @app.route("/")
 def index():
+    return redirect(url_for("admin_dashboard"))
+
+@app.route("/form")
+def form_page():
     return render_template("index.html")
 
 @app.route("/submit", methods=["POST"])

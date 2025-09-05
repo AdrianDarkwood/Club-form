@@ -1,64 +1,28 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 import os
 from sqlalchemy import inspect
+from models import db, Registration
 
 app = Flask(__name__)
 
 # Database configuration
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL").replace("postgres://", "postgresql://")
+database_url = os.getenv("DATABASE_URL")
+if database_url:
+    # Render provides postgres://; SQLAlchemy needs postgresql://
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+else:
+    # Local fallback for development
+    database_url = "sqlite:///local.db"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
 
-# Model
-class Registration(db.Model):
-    __tablename__ = "registration"  # Ensure table name matches models.py
-    id = db.Column(db.Integer, primary_key=True)
-    team_name = db.Column(db.String(200), nullable=False)  # Added team_name, required
-    member1_name = db.Column(db.String(100), nullable=False)
-    member1_email = db.Column(db.String(120), nullable=False)
-    member1_branch = db.Column(db.String(50), nullable=False)
-    member1_usn = db.Column(db.String(20))
-    member1_phone = db.Column(db.String(15))
+# Bind SQLAlchemy instance from models.py
+db.init_app(app)
 
-    member2_name = db.Column(db.String(100))
-    member2_email = db.Column(db.String(120))
-    member2_branch = db.Column(db.String(50))
-    member2_usn = db.Column(db.String(20))
-    member2_phone = db.Column(db.String(15))
-
-    member3_name = db.Column(db.String(100))
-    member3_email = db.Column(db.String(120))
-    member3_branch = db.Column(db.String(50))
-    member3_usn = db.Column(db.String(20))
-    member3_phone = db.Column(db.String(15))
-
-    member4_name = db.Column(db.String(100))
-    member4_email = db.Column(db.String(120))
-    member4_branch = db.Column(db.String(50))
-    member4_usn = db.Column(db.String(20))
-    member4_phone = db.Column(db.String(15))
-
-    member5_name = db.Column(db.String(100))
-    member5_email = db.Column(db.String(120))
-    member5_branch = db.Column(db.String(50))
-    member5_usn = db.Column(db.String(20))
-    member5_phone = db.Column(db.String(15))
-
-    member6_name = db.Column(db.String(100))
-    member6_email = db.Column(db.String(120))
-    member6_branch = db.Column(db.String(50))
-    member6_usn = db.Column(db.String(20))
-    member6_phone = db.Column(db.String(15))
-
-    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-# ✅ Create tables only if they don't exist
+# ✅ Create tables (no-op if they already exist)
 with app.app_context():
-    inspector = inspect(db.engine)
-    if not inspector.has_table("registration"):
-        db.create_all()
+    db.create_all()
 
 @app.route("/")
 def index():

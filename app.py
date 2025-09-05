@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+# from dotenv import load_dotenv
+# load_dotenv()
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import os
 from sqlalchemy import inspect
 from models import db, Registration
 from functools import wraps
+
 
 app = Flask(__name__)
 
@@ -25,31 +28,41 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-def _unauthorized_response():
-    return ("Unauthorized", 401, {"WWW-Authenticate": "Basic realm=Registration Admin"})
+app.secret_key = os.getenv("SECRET_KEY", "please-change-me")
 
-def require_basic_auth(view_func):
+def login_required(view_func):
     @wraps(view_func)
     def wrapped(*args, **kwargs):
-        admin_user = os.getenv("ADMIN_USERNAME")
-        admin_pass = os.getenv("ADMIN_PASSWORD")
-
-        if not admin_user or not admin_pass:
-            return ("Admin credentials not configured", 403)
-
-        auth = request.authorization
-        if not auth or auth.type != "basic":
-            return _unauthorized_response()
-
-        if auth.username != admin_user or auth.password != admin_pass:
-            return _unauthorized_response()
-
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("admin_login"))
         return view_func(*args, **kwargs)
     return wrapped
 
 @app.route("/")
-def index():
-    return redirect(url_for("admin_dashboard"))
+def admin_login():
+    return render_template("admin_login.html")
+
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.form.get("username")
+    password = request.form.get("password")
+    admin_user = os.getenv("ADMIN_USERNAME")
+    admin_pass = os.getenv("ADMIN_PASSWORD")
+
+    if not admin_user or not admin_pass:
+        return ("Admin credentials not configured", 403)
+
+    if username == admin_user and password == admin_pass:
+        session["admin_logged_in"] = True
+        return redirect(url_for("admin_dashboard"))
+    else:
+        flash("Invalid credentials", "error")
+        return redirect(url_for("admin_login"))
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("admin_login"))
 
 @app.route("/form")
 def form_page():
@@ -106,10 +119,18 @@ def thank_you():
     return render_template("thank-you.html")
 
 @app.route("/admin")
-@require_basic_auth
+@login_required
 def admin_dashboard():
     registrations = Registration.query.order_by(Registration.submitted_at.desc()).all()
     return render_template("admin.html", registrations=registrations)
+
+@app.route("/admin/delete/<int:registration_id>", methods=["POST"])
+@login_required
+def delete_registration(registration_id: int):
+    registration = Registration.query.get_or_404(registration_id)
+    db.session.delete(registration)
+    db.session.commit()
+    return redirect(url_for("admin_dashboard"))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

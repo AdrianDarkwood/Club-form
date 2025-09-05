@@ -24,7 +24,10 @@
   <div class="container">
     <h1>Admin Dashboard</h1>
     <div class="meta">Viewing latest registrations. This page is not linked from public pages.</div>
-    <p class="meta"><a href="/form">Go to Registration Form</a></p>
+    <p class="meta">
+      <a href="/form">Go to Registration Form</a> ·
+      <a href="/logout">Logout</a>
+    </p>
 
     {% if registrations|length == 0 %}
       <p>No registrations yet.</p>
@@ -40,6 +43,7 @@
           <th>Member 4</th>
           <th>Member 5</th>
           <th>Member 6</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -90,6 +94,11 @@
               <div class="muted">{{ r.member6_email or '' }}</div>
               <div class="muted">USN: {{ r.member6_usn or '-' }}, Ph: {{ r.member6_phone or '-' }}</div>
             {% else %}-{% endif %}
+          </td>
+          <td>
+            <form action="/admin/delete/{{ r.id }}" method="POST" onsubmit="return confirm('Delete this entry?');">
+              <button type="submit">Delete</button>
+            </form>
           </td>
         </tr>
         {% endfor %}

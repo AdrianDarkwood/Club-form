@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f7fb; color: #1a202c; margin: 0; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { margin-bottom: 16px; }
+    .meta { color: #4a5568; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+    th { background: #edf2f7; font-weight: 600; }
+    .nowrap { white-space: nowrap; }
+    .muted { color: #718096; font-size: 12px; }
+    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; background: #ebf8ff; color: #2b6cb0; font-size: 12px; }
+    .section { margin-top: 24px; }
+    .cell { max-width: 320px; }
+    .team { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+    <div class="meta">Viewing latest registrations. This page is not linked from public pages.</div>
+
+    {% if registrations|length == 0 %}
+      <p>No registrations yet.</p>
+    {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th class="nowrap">Submitted</th>
+          <th>Team</th>
+          <th>Member 1</th>
+          <th>Member 2</th>
+          <th>Member 3</th>
+          <th>Member 4</th>
+          <th>Member 5</th>
+          <th>Member 6</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in registrations %}
+        <tr>
+          <td class="nowrap">
+            {{ r.submitted_at.strftime('%Y-%m-%d %H:%M') if r.submitted_at else '-' }}
+          </td>
+          <td class="cell">
+            <div class="team">{{ r.team_name }}</div>
+          </td>
+          <td class="cell">
+            <div>{{ r.member1_name }} <span class="badge">{{ r.member1_branch }}</span></div>
+            <div class="muted">{{ r.member1_email }}</div>
+            <div class="muted">USN: {{ r.member1_usn or '-' }}, Ph: {{ r.member1_phone or '-' }}</div>
+          </td>
+          <td class="cell">
+            {% if r.member2_name %}
+              <div>{{ r.member2_name }} {% if r.member2_branch %}<span class="badge">{{ r.member2_branch }}</span>{% endif %}</div>
+              <div class="muted">{{ r.member2_email or '' }}</div>
+              <div class="muted">USN: {{ r.member2_usn or '-' }}, Ph: {{ r.member2_phone or '-' }}</div>
+            {% else %}-{% endif %}
+          </td>
+          <td class="cell">
+            {% if r.member3_name %}
+              <div>{{ r.member3_name }} {% if r.member3_branch %}<span class="badge">{{ r.member3_branch }}</span>{% endif %}</div>
+              <div class="muted">{{ r.member3_email or '' }}</div>
+              <div class="muted">USN: {{ r.member3_usn or '-' }}, Ph: {{ r.member3_phone or '-' }}</div>
+            {% else %}-{% endif %}
+          </td>
+          <td class="cell">
+            {% if r.member4_name %}
+              <div>{{ r.member4_name }} {% if r.member4_branch %}<span class="badge">{{ r.member4_branch }}</span>{% endif %}</div>
+              <div class="muted">{{ r.member4_email or '' }}</div>
+              <div class="muted">USN: {{ r.member4_usn or '-' }}, Ph: {{ r.member4_phone or '-' }}</div>
+            {% else %}-{% endif %}
+          </td>
+          <td class="cell">
+            {% if r.member5_name %}
+              <div>{{ r.member5_name }} {% if r.member5_branch %}<span class="badge">{{ r.member5_branch }}</span>{% endif %}</div>
+              <div class="muted">{{ r.member5_email or '' }}</div>
+              <div class="muted">USN: {{ r.member5_usn or '-' }}, Ph: {{ r.member5_phone or '-' }}</div>
+            {% else %}-{% endif %}
+          </td>
+          <td class="cell">
+            {% if r.member6_name %}
+              <div>{{ r.member6_name }} {% if r.member6_branch %}<span class="badge">{{ r.member6_branch }}</span>{% endif %}</div>
+              <div class="muted">{{ r.member6_email or '' }}</div>
+              <div class="muted">USN: {{ r.member6_usn or '-' }}, Ph: {{ r.member6_phone or '-' }}</div>
+            {% else %}-{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</body>
+</html>
+

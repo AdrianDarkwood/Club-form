@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import os
 from sqlalchemy import inspect
 from models import db, Registration
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -23,6 +24,28 @@ db.init_app(app)
 # ✅ Create tables (no-op if they already exist)
 with app.app_context():
     db.create_all()
+
+def _unauthorized_response():
+    return ("Unauthorized", 401, {"WWW-Authenticate": "Basic realm=Registration Admin"})
+
+def require_basic_auth(view_func):
+    @wraps(view_func)
+    def wrapped(*args, **kwargs):
+        admin_user = os.getenv("ADMIN_USERNAME")
+        admin_pass = os.getenv("ADMIN_PASSWORD")
+
+        if not admin_user or not admin_pass:
+            return ("Admin credentials not configured", 403)
+
+        auth = request.authorization
+        if not auth or auth.type != "basic":
+            return _unauthorized_response()
+
+        if auth.username != admin_user or auth.password != admin_pass:
+            return _unauthorized_response()
+
+        return view_func(*args, **kwargs)
+    return wrapped
 
 @app.route("/")
 def index():
@@ -77,6 +100,12 @@ def submit():
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank-you.html")
+
+@app.route("/admin")
+@require_basic_auth
+def admin_dashboard():
+    registrations = Registration.query.order_by(Registration.submitted_at.desc()).all()
+    return render_template("admin.html", registrations=registrations)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
